@@ -1,24 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React, { useState, useEffect } from "react";
+import Memetemps from "./Memetemps";
 function App() {
+  const [temp, setTemp] = useState([]);
+  const fetchMeme = async () => {
+    try {
+      const response = await fetch("https://api.imgflip.com/get_memes");
+      const temps = await response.json();
+      const temp = temps.data.memes;
+      setTemp(temp);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchMeme();
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <main>
+      <h2 className='title'>Top 100 Meme Templates</h2>
+      <p>Source : Imgflip</p>
+      <Memetemps temp={temp}></Memetemps>
+    </main>
   );
 }
 
